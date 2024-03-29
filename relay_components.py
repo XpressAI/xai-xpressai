@@ -222,6 +222,7 @@ class ForEachStreaming(Component):
     def do(self, ctx) -> BaseComponent:
         self.execute(ctx)
         if self.finished:
+            self.finished = False
             return self.next
         else:
             return self
