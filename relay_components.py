@@ -1,5 +1,6 @@
 from xai_components.base import InArg, OutArg, InCompArg, Component, BaseComponent, secret, xai_component
 import openai
+from openai import OpenAI
 import os
 import requests
 import shutil
@@ -54,6 +55,8 @@ class XpressAIAuthorize(Component):
         openai.base_url = "https://relay.public.cloud.xpress.ai/v1/"
         openai.api_key =  os.getenv("XPRESSAI_API_TOKEN")
         ctx["openai_api_key"] = openai.api_key
+        client = OpenAI(api_key=openai.api_key, base_url=openai.base_url)
+        ctx['client'] = client
 
 
 @xai_component
