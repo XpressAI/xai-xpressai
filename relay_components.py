@@ -53,9 +53,13 @@ class XpressAIAuthorize(Component):
 
     def execute(self, ctx) -> None:    
         openai.base_url = "https://relay.public.cloud.xpress.ai/v1/"
-        openai.api_key =  os.getenv("XPRESSAI_API_TOKEN")
+        ctx["openai_base_url"] = openai.base_url
+
+        openai.api_key = os.getenv("XPRESSAI_API_TOKEN") or "OPENSESAME"
         ctx["openai_api_key"] = openai.api_key
+
         client = OpenAI(api_key=openai.api_key, base_url=openai.base_url)
+        ctx['openai_client'] = client
         ctx['client'] = client
 
 
