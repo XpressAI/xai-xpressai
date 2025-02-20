@@ -47,23 +47,3 @@ class XpressAIRecognizeDocument(Component):
         if self.render:
             self.rendered_html.value = response_data.get('rendered_html', '')
 
-
-
-@xai_component
-class XpressAIFooAgent(Component):
-    agent_name: InArg[str]
-    modules: InArg[dynalist]
-
-    def execute(self, ctx) -> None:
-        pass
-
-
-@xai_component(type="Start", color="red")
-class XpressAILLMModule(Component):
-
-    model_name: InCompArg[str]
-    ref: OutArg[Component]
-
-    def execute(self, ctx) -> None:
-        self.ref.value = self
-        
