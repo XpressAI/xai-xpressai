@@ -94,6 +94,7 @@ class XpressAIChat(Component):
         super().__init__()
         
     def execute(self, ctx) -> None:
+        client = ctx['openai_client']
         if self.conversation.value is not None:
             messages = self.conversation.value
         else:
@@ -112,7 +113,7 @@ class XpressAIChat(Component):
             print(message)
         
         
-        result = openai.chat.completions.create(
+        result = client.chat.completions.create(
             model=self.model_name.value,
             messages=messages,
             max_tokens=self.max_tokens.value if self.max_tokens.value is not None else 128,
@@ -158,6 +159,7 @@ class XpressAIStreamChat(Component):
     
     
     def execute(self, ctx) -> None:
+        client = ctx['openai_client']
         if self.conversation.value is not None:
             messages = self.conversation.value
         else:
@@ -177,7 +179,7 @@ class XpressAIStreamChat(Component):
             print(message)
         
         
-        result = openai.chat.completions.create(
+        result = client.chat.completions.create(
             model=self.model_name.value,
             messages=messages,
             max_tokens=self.max_tokens.value if self.max_tokens.value is not None else 128,
