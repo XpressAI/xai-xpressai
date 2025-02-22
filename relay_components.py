@@ -19,32 +19,40 @@ class Conversation:
             print(f"{message['role']}: {message['content']}\n\n")
 
 @xai_component
-class XpressAIMakeConversation(Component):
+class OpenAIMakeConversation(Component):
     """Creates a conversation object to hold conversation history.
     """
-
-    prev: InArg[Conversation]
+    prev: InArg[list]
     system_msg: InArg[str]
     user_msg: InArg[str]
+    user_img: InArg[str]
     assistant_msg: InArg[str]
     function_msg: InArg[str]
 
-    conversation: OutArg[Conversation]
+    conversation: OutArg[list]
 
     def execute(self, ctx) -> None:
         conv = Conversation()
+
         if self.prev.value is not None:
-            conv.conversation_history.extend(self.prev.value.conversation_history)
+            if isinstance(self.prev.value, list):
+                conv.conversation_history.extend(self.prev.value)
+            else:
+                conv.conversation_history.extend(self.prev.value.conversation_history)
         if self.system_msg.value is not None:
             conv.add_message("system", self.system_msg.value)
-        if self.user_msg.value is not None:
+        if self.user_msg.value is not None and self.user_img.value is None:
             conv.add_message("user", self.user_msg.value)
+        if self.user_img.value is not None:
+            image_url = image_to_data_uri(self.user_img.value)
+
+            conv.add_message("user", [{ "type": "text", "text": self.user_msg.value }, { "type": "image_url", "image_url": { "url": image_url } } ])
         if self.assistant_msg.value is not None:
             conv.add_message("assistant", self.assistant_msg.value)
         if self.function_msg.value is not None:
             conv.add_message("function", self.function_msg.value)
 
-        self.conversation.value = conv
+        self.conversation.value = conv.conversation_history
 
 @xai_component
 class XpressAIAuthorize(Component):
