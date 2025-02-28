@@ -4,6 +4,7 @@ from openai import OpenAI
 import os
 import requests
 import shutil
+import base64
 
 
 class Conversation:
