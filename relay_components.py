@@ -18,6 +18,14 @@ class Conversation:
         for message in self.conversation_history:
             print(f"{message['role']}: {message['content']}\n\n")
 
+
+def image_to_data_uri(image_path):
+    with open(image_path, "rb") as image_file:
+        base64_image = base64.b64encode(image_file.read()).decode("utf-8")
+        data_uri = f"data:image/jpeg;base64,{base64_image}"
+        return data_uri
+
+
 @xai_component
 class XpressAIMakeConversation(Component):
     """Creates a conversation object to hold conversation history.
