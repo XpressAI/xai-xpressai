@@ -19,7 +19,7 @@ class Conversation:
             print(f"{message['role']}: {message['content']}\n\n")
 
 @xai_component
-class OpenAIMakeConversation(Component):
+class XpressAIMakeConversation(Component):
     """Creates a conversation object to hold conversation history.
     """
     prev: InArg[list]
