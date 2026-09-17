@@ -72,7 +72,10 @@ class XpressAIAuthorize(Component):
         openai.base_url = "https://relay.public.cloud.xpress.ai/v1/"
         ctx["openai_base_url"] = openai.base_url
 
-        openai.api_key = os.getenv("XPRESSAI_API_TOKEN") or "OPENSESAME"
+        relay_token = os.getenv("XPRESSAI_RELAY_TOKEN", "").strip()
+        if not relay_token:
+            raise ValueError("Set XPRESSAI_RELAY_TOKEN to an authorized Relay credential.")
+        openai.api_key = relay_token
         ctx["openai_api_key"] = openai.api_key
 
         client = OpenAI(api_key=openai.api_key, base_url=openai.base_url)
@@ -374,4 +377,3 @@ class JoinConversations(Component):
             ret = ret + self.conversation_3.value
             
         self.out_conversation.value = ret
-
