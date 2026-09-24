@@ -1,0 +1,28 @@
+name: Review an enterprise approval request
+summary: Inspect a request, obtain the operator's decision, and apply only that decision.
+inputs:
+  - name: request_id
+    context: The request identifier in the legacy application, such as DEMO-42.
+outputs:
+  - name: decision
+    context: The operator's approval or rejection and the resulting application status.
+  - name: evidence
+    context: Evidence of the resulting status, or the reason no change could be made.
+steps:
+  - prompt: >-
+      Open the configured legacy application and inspect the request identified
+      by request_id. Summarize its requester, amount, purpose and current status.
+      If the request is missing, already decided or inaccessible, stop and report
+      that condition without changing it.
+    inputs: [request_id]
+  - prompt: >-
+      Ask the operator to approve or reject this specific request, and wait for
+      an explicit decision. Do not approve it yourself or treat the scheduled
+      trigger as approval. Include the request identifier in the question.
+    inputs: [request_id]
+  - prompt: >-
+      Recheck that this is the same request and its relevant details have not
+      changed. Apply only the operator's explicit decision, verify the resulting
+      status, and report decision and evidence. If anything changed or the
+      decision is unclear, ask again before taking action.
+    inputs: [request_id]
